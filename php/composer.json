@@ -1,0 +1,10 @@
+{
+    "require": {
+        "jenssegers/agent": "^2.6"
+    },
+    "autoload": {
+        "psr-0": {
+            "App\\": "app/",
+        }
+    }
+}
