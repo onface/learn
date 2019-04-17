@@ -33,6 +33,13 @@ class ComposerStaticInit1d9d8144faf7db278c94b108d8a1a26b
                 0 => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/namespaced',
             ),
         ),
+        'A' => 
+        array (
+            'App\\' => 
+            array (
+                0 => __DIR__ . '/../..' . '/app',
+            ),
+        ),
     );
 
     public static $classMap = array (

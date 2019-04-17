@@ -100,7 +100,7 @@ class Agent extends Mobile_Detect {
 ```js
 "autoload": {
     "psr-0": {
-        "App\\": "app/",
+        "App\\": "app/"
     }
 }
 ```
@@ -112,3 +112,59 @@ composer dump-autoload
 ```
 
 > [composer cil ](https://docs.phpcomposer.com/03-cli.html)
+
+运行后会在 `php/vendor/composer/autoload_namespaces.php` 文件中新增代码
+
+```diff
+return array(
+    'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
++    'App\\' => array($baseDir . '/app'),
+```
+
+在 `php/vendor/composer/autoload_static.php` 中新增代码
+
+```diff
++ 'A' =>
++ array (
++     'App\\' =>
++     array (
++         0 => __DIR__ . '/../..' . '/app',
++     ),
++ ),
+```
+
+新增代码 `1-composer/psr-4.php`
+
+```html
+<?php
+use App\demo\SayTime;
+
+$sayTime = new SayTime();
+$sayTime->say();
+```
+
+此时浏览器访问 `/1-composer/psr-4.php` 会出现如下错误
+
+```shell
+Fatal error: Uncaught Error: Class 'App\demo\SayTime' not found in /Users/nimo/Documents/onface/school/php/1-composer/psr-4.php:5 Stack trace: #0 /Users/nimo/.composer/vendor/laravel/valet/server.php(158): require() #1 {main} thrown in /Users/nimo/Documents/onface/school/php/1-composer/psr-4.php on line 5
+```
+
+因为只是 `use App\demo\SayTime;` 了但是没有加载 `app/demo/SayTime.php` 文件.
+
+有两种方式加载
+
+第一种:在 `use` 之前使用 `require('../app/demo/SayTime.php');` 加载文件
+
+```html
+<?php
+require('../app/demo/SayTime.php');
+use App\demo\SayTime;
+
+$sayTime = new SayTime();
+$sayTime->say();
+```
+
+
+此时浏览器访问 `/1-composer/psr-4.php` 就会出现时间戳
+
+> For Jser: 注意 php time()返回的不是毫秒时间戳,是秒时间戳.
